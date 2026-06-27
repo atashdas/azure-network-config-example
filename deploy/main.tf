@@ -1,7 +1,5 @@
 locals {
   root_path = dirname(abspath(path.root))
-  # root_path = replace(dirname(abspath(path.root)), "\\", "/")
-
 
   is_config_in_yaml = endswith(var.config_file, ".yaml")
   config_file_path  = format("%s/config/%s", local.root_path, var.config_file)
