@@ -1,0 +1,232 @@
+---
+cloud:
+  global:
+    azure:
+      subscription_id: 19c7a02a-910d-4397-898a-525dc623406c
+      tenant_id: 21c73cd9-cf70-4598-8f36-c347b3896cb4
+      location: australiaeast
+    defaults:
+      resource_group: rg-network-all
+      peering:
+        peer_complete_virtual_networks_enabled: true
+        allow_virtual_network_access: true
+        allow_forwarded_traffic: true
+        allow_gateway_transit: false
+        use_remote_gateways: false
+    tags:
+      Org: ACME Corporation
+      Division: Digital
+      Department: Enterprise Systems
+      BusinessOwner: Andrew Miller
+      TechnicalOwner: adas@test.com
+  resource_groups:
+    rg-network-dr:
+      location: australiacentral
+      lock_level: CanNotDelete
+      tags:
+        scope: dr
+    rg-network-dr2:
+      location: australiacentral2
+      lock_level: ReadOnly
+      tags:
+        scope: dr2
+  networks:
+    hub:
+      resource_group: rg-network-hub
+      route_tables:
+        rt-hub-gateway: 
+          bgp_route_propagation_enabled: true
+          routes:
+            rt-hub-gateway-01:
+              address_prefix: 10.198.0.128/25
+              next_hop_type: VnetLocal
+            rt-hub-gateway-02:
+              address_prefix: 10.0.0.0/10
+              next_hop_type: VirtualNetworkGateway
+            rt-hub-gateway-03:
+              address_prefix: 172.68.0.0/16
+              next_hop_type: VirtualNetworkGateway
+            rt-hub-gateway-04:
+              address_prefix: 192.76.0.0/16
+              next_hop_type: VirtualNetworkGateway
+            rt-hub-gateway-05:
+              address_prefix: 0.0.0.0/0
+              next_hop_type: VirtualAppliance
+              next_hop_in_ip_address: 10.198.1.100
+          subnet_keys:
+            - vnet-acme-es-hub-australiaeast:GatewaySubnet
+      network_security_groups:
+        nsg-hub-gateway:
+          subnet_keys:
+            - vnet-acme-es-hub-australiaeast:GatewaySubnet
+          rules:
+            onpremises-web-access:
+              description: Allow onpremises access to http(s) services in cloud
+              protocol: Tcp
+              priority: 100
+              direction: Inbound
+              access: Allow
+              source_port_ranges:
+                - "*"
+              destination_port_ranges:
+                - 80
+                - 443
+              source_address_prefixes:
+                - 10.0.0.0/10
+                - 172.68.0.0/16
+                - 192.76.0.0/16
+              destination_address_prefixes:
+                - 10.198.2.0/24
+                - 10.198.4.0/24
+                - 10.198.6.0/24
+                - 10.198.8.0/24
+                - 10.198.10.0/24
+      vnets:
+        vnet-acme-es-hub-australiaeast:
+          address_space:
+            - 10.198.0.0/23
+          subnets:
+            AzureBastionSubnet:
+              address_prefixes: 
+                - 10.198.0.0/25
+              default_outbound_access_enabled: true
+            GatewaySubnet:
+              address_prefixes:
+                - 10.198.0.128/25
+              default_outbound_access_enabled: true
+            AzureFirewallSubnet:
+              address_prefixes: 
+                - 10.198.1.0/25
+              default_outbound_access_enabled: true
+          peerings:
+            hub-identity:
+              remote_virtual_network_name: vnet-acme-es-identity-australiaeast
+            hub-sandbox:
+              remote_virtual_network_name: vnet-acme-es-sbx-australiaeast
+            hub-nonprod-dev:
+              remote_virtual_network_name: vnet-acme-es-dev-australiaeast
+            hub-nonprod-test:
+              remote_virtual_network_name: vnet-acme-es-test-australiaeast
+            hub-prod:
+              remote_virtual_network_name: vnet-acme-es-prod-australiaeast
+    identity:
+      vnets:
+        vnet-acme-es-identity-australiaeast:
+          resource_group: rg-network-identity 
+          address_space: 
+            - 10.198.2.0/23
+          subnets:
+            snet-identity-app:
+              address_prefixes: 
+                - 10.198.2.0/24
+              default_outbound_access_enabled: false
+              service_endpoints: 
+                - Microsoft.KeyVault
+                - Microsoft.Storage
+          peerings:
+            identity-hub:
+              remote_virtual_network_name: vnet-acme-es-hub-australiaeast
+              allow_gateway_transit: true
+              use_remote_gateways: true
+    sandbox:
+      vnets:
+        vnet-acme-es-sbx-australiaeast:
+          resource_group: rg-network-sbx 
+          address_space: 
+            - 10.198.4.0/23
+          subnets:
+            snet-sbx-app:
+              address_prefixes: 
+                - 10.198.4.0/24
+              default_outbound_access_enabled: false
+              service_endpoints: 
+                - Microsoft.KeyVault
+                - Microsoft.Storage
+            snet-sbx-db:
+              address_prefixes: 
+                - 10.198.5.0/24
+              default_outbound_access_enabled: false
+              service_endpoints: 
+                - Microsoft.KeyVault
+                - Microsoft.Storage
+          peerings:
+            sandbox-hub:
+              remote_virtual_network_name: vnet-acme-es-hub-australiaeast
+              allow_gateway_transit: true
+              use_remote_gateways: true
+    non_production: 
+      vnets:
+        vnet-acme-es-dev-australiaeast:
+          resource_group: rg-network-dev 
+          address_space: 
+            - 10.198.6.0/23
+          subnets:
+            snet-dev-app:
+              address_prefixes: 
+                - 10.198.6.0/24
+              default_outbound_access_enabled: false
+              service_endpoints: 
+                - Microsoft.KeyVault
+                - Microsoft.Storage
+            snet-dev-db:
+              address_prefixes: 
+                - 10.198.7.0/24
+              default_outbound_access_enabled: false
+              service_endpoints: 
+                - Microsoft.KeyVault
+                - Microsoft.Storage
+          peerings:
+            dev-hub:
+              remote_virtual_network_name: vnet-acme-es-hub-australiaeast
+              allow_gateway_transit: true
+              use_remote_gateways: true
+        vnet-acme-es-test-australiaeast:
+          resource_group: rg-network-test 
+          address_space: 
+            - 10.198.8.0/23
+          subnets:
+            snet-test-app:
+              address_prefixes:
+                - 10.198.8.0/24
+              default_outbound_access_enabled: false
+              service_endpoints: 
+                - Microsoft.KeyVault
+                - Microsoft.Storage
+            snet-test-db:
+              address_prefixes: 
+                - 10.198.9.0/24
+              default_outbound_access_enabled: false
+              service_endpoints: 
+                - Microsoft.KeyVault
+                - Microsoft.Storage
+          peerings:
+            test-hub:
+              remote_virtual_network_name: vnet-acme-es-hub-australiaeast
+              allow_gateway_transit: true
+              use_remote_gateways: true
+    production:
+      vnets:
+        vnet-acme-es-prod-australiaeast:
+          resource_group: rg-network-prod
+          address_space: 
+            - 10.198.10.0/23 
+          subnets:
+            snet-prod-app:
+              address_prefixes:
+                - 10.198.10.0/24
+              default_outbound_access_enabled: false
+              service_endpoints: 
+                - Microsoft.KeyVault
+                - Microsoft.Storage
+            snet-prod-db:
+              address_prefixes: 
+                - 10.198.11.0/24
+              default_outbound_access_enabled: false
+              service_endpoints: 
+                - Microsoft.KeyVault
+                - Microsoft.Storage
+          peerings:
+            prod-hub:
+              remote_virtual_network_name: vnet-acme-es-hub-australiaeast
+              allow_gateway_transit: true
+              use_remote_gateways: true
