@@ -18,7 +18,7 @@ variable "parameters" {
 variable "association_parameters" {
   description = "Parameters for  route table to subnet associations to be created."
   type = map(object({
-    subnet_id = string
+    subnet_id       = string
     route_table_key = string
   }))
 }

@@ -1,5 +1,5 @@
 locals {
-  nsgRules = merge(flatten([
+  nsg_rules = merge(flatten([
     for nsgKey, nsgConfig in var.parameters : [
       for ruleConfig in try(nsgConfig.rules, []) : {
         (format("%s:%s", nsgKey, ruleConfig.name)) = {
@@ -25,13 +25,13 @@ locals {
   ])...)
 
   null_source_address_prefix = merge(flatten([
-    for key, rule in local.nsgRules : {
+    for key, rule in local.nsg_rules : {
       (key) = {}
     } if rule.source_address_prefix == null && rule.source_address_prefixes == null
   ])...)
 
   null_destination_address_prefix = merge(flatten([
-    for key, rule in local.nsgRules : {
+    for key, rule in local.nsg_rules : {
       (key) = {}
     } if rule.destination_address_prefix == null && rule.destination_address_prefixes == null
   ])...)
@@ -61,7 +61,7 @@ resource "azurerm_network_security_group" "this" {
   tags = each.value.tags
 }
 resource "azurerm_network_security_rule" "this" {
-  for_each = local.nsgRules
+  for_each = local.nsg_rules
 
   name                                       = each.value.name
   priority                                   = each.value.priority

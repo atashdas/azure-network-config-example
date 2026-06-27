@@ -34,7 +34,7 @@ cloud:
     hub:
       resource_group: rg-network-hub
       route_tables:
-        rt-hub-gateway: 
+        rt-hub-gateway:
           bgp_route_propagation_enabled: true
           routes:
             rt-hub-gateway-01:
@@ -87,7 +87,7 @@ cloud:
             - 10.198.0.0/23
           subnets:
             AzureBastionSubnet:
-              address_prefixes: 
+              address_prefixes:
                 - 10.198.0.0/25
               default_outbound_access_enabled: true
             GatewaySubnet:
@@ -95,7 +95,7 @@ cloud:
                 - 10.198.0.128/25
               default_outbound_access_enabled: true
             AzureFirewallSubnet:
-              address_prefixes: 
+              address_prefixes:
                 - 10.198.1.0/25
               default_outbound_access_enabled: true
           peerings:
@@ -112,15 +112,15 @@ cloud:
     identity:
       vnets:
         vnet-acme-es-identity-australiaeast:
-          resource_group: rg-network-identity 
-          address_space: 
+          resource_group: rg-network-identity
+          address_space:
             - 10.198.2.0/23
           subnets:
             snet-identity-app:
-              address_prefixes: 
+              address_prefixes:
                 - 10.198.2.0/24
               default_outbound_access_enabled: false
-              service_endpoints: 
+              service_endpoints:
                 - Microsoft.KeyVault
                 - Microsoft.Storage
           peerings:
@@ -131,22 +131,22 @@ cloud:
     sandbox:
       vnets:
         vnet-acme-es-sbx-australiaeast:
-          resource_group: rg-network-sbx 
-          address_space: 
+          resource_group: rg-network-sbx
+          address_space:
             - 10.198.4.0/23
           subnets:
             snet-sbx-app:
-              address_prefixes: 
+              address_prefixes:
                 - 10.198.4.0/24
               default_outbound_access_enabled: false
-              service_endpoints: 
+              service_endpoints:
                 - Microsoft.KeyVault
                 - Microsoft.Storage
             snet-sbx-db:
-              address_prefixes: 
+              address_prefixes:
                 - 10.198.5.0/24
               default_outbound_access_enabled: false
-              service_endpoints: 
+              service_endpoints:
                 - Microsoft.KeyVault
                 - Microsoft.Storage
           peerings:
@@ -154,25 +154,25 @@ cloud:
               remote_virtual_network_name: vnet-acme-es-hub-australiaeast
               allow_gateway_transit: true
               use_remote_gateways: true
-    non_production: 
+    non_production:
       vnets:
         vnet-acme-es-dev-australiaeast:
-          resource_group: rg-network-dev 
-          address_space: 
+          resource_group: rg-network-dev
+          address_space:
             - 10.198.6.0/23
           subnets:
             snet-dev-app:
-              address_prefixes: 
+              address_prefixes:
                 - 10.198.6.0/24
               default_outbound_access_enabled: false
-              service_endpoints: 
+              service_endpoints:
                 - Microsoft.KeyVault
                 - Microsoft.Storage
             snet-dev-db:
-              address_prefixes: 
+              address_prefixes:
                 - 10.198.7.0/24
               default_outbound_access_enabled: false
-              service_endpoints: 
+              service_endpoints:
                 - Microsoft.KeyVault
                 - Microsoft.Storage
           peerings:
@@ -181,22 +181,22 @@ cloud:
               allow_gateway_transit: true
               use_remote_gateways: true
         vnet-acme-es-test-australiaeast:
-          resource_group: rg-network-test 
-          address_space: 
+          resource_group: rg-network-test
+          address_space:
             - 10.198.8.0/23
           subnets:
             snet-test-app:
               address_prefixes:
                 - 10.198.8.0/24
               default_outbound_access_enabled: false
-              service_endpoints: 
+              service_endpoints:
                 - Microsoft.KeyVault
                 - Microsoft.Storage
             snet-test-db:
-              address_prefixes: 
+              address_prefixes:
                 - 10.198.9.0/24
               default_outbound_access_enabled: false
-              service_endpoints: 
+              service_endpoints:
                 - Microsoft.KeyVault
                 - Microsoft.Storage
           peerings:
@@ -208,21 +208,21 @@ cloud:
       vnets:
         vnet-acme-es-prod-australiaeast:
           resource_group: rg-network-prod
-          address_space: 
-            - 10.198.10.0/23 
+          address_space:
+            - 10.198.10.0/23
           subnets:
             snet-prod-app:
               address_prefixes:
                 - 10.198.10.0/24
               default_outbound_access_enabled: false
-              service_endpoints: 
+              service_endpoints:
                 - Microsoft.KeyVault
                 - Microsoft.Storage
             snet-prod-db:
-              address_prefixes: 
+              address_prefixes:
                 - 10.198.11.0/24
               default_outbound_access_enabled: false
-              service_endpoints: 
+              service_endpoints:
                 - Microsoft.KeyVault
                 - Microsoft.Storage
           peerings:

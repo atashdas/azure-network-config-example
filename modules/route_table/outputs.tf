@@ -5,9 +5,9 @@ output "rt_id_map" {
   ])...)
 }
 
-output "nextHopIp_nonVirtualAppliance" {
-  value = local.nextHopIp_nonVirtualAppliance
-}
-output "routes" {
-  value = local.routes
-}
+# output "next_hop_ip_non_virtual_appliance" {
+#   value = local.next_hop_ip_non_virtual_appliance
+# }
+# output "routes" {
+#   value = local.routes
+# }

@@ -1,3 +1,3 @@
-output "rg_locks" {
-  value = local.rg_locks
-}
+# output "rg_locks" {
+#   value = local.rg_locks
+# }

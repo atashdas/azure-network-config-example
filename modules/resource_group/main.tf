@@ -25,4 +25,3 @@ resource "azurerm_management_lock" "this" {
   lock_level = each.value.lock_level
   notes      = each.value.lock_level == null ? null : format("Resource Group %s is locked at %s level.", each.value.name, each.value.lock_level)
 }
-

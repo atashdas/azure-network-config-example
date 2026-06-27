@@ -7,7 +7,6 @@ locals {
           location            = lookup(vnetConfig, "location", try(netConfig.location, local.g_location))
           resource_group_name = lookup(vnetConfig, "resource_group", try(netConfig.resource_group, local.g_resource_group))
           address_space       = lookup(vnetConfig, "address_space", null)
-          dns_servers         = lookup(vnetConfig, "dns_servers", try(netConfig.dns_servers, local.g_dns_servers))
           tags                = merge(lookup(vnetConfig, "tags", {}), try(netConfig.tags, {}), local.g_tags)
           subnets = merge(flatten([
             for snetKey, snetConfig in try(vnetConfig.subnets, {}) : {
@@ -80,7 +79,7 @@ locals {
       }
     ]
   ])...)
-  nsgAssoc = merge(flatten([
+  nsg_assoc = merge(flatten([
     for netKey, netConfig in try(local.config_data.cloud.networks, {}) : [
       for nsgKey, nsgConfig in try(netConfig.network_security_groups, {}) : [
         for snetKey in try(nsgConfig.subnet_keys, []) : {
@@ -116,7 +115,7 @@ locals {
       }
     ]
   ])...)
-  rtAssoc = merge(flatten([
+  rt_assoc = merge(flatten([
     for netKey, netConfig in try(local.config_data.cloud.networks, {}) : [
       for rtKey, rtConfig in try(netConfig.route_tables, {}) : [
         for snetKey in try(rtConfig.subnet_keys, []) : {
@@ -139,7 +138,7 @@ locals {
       }
     } if try(rgConfig.location, null) != null && local.g_location != null
   ])...)
-  netRGs = merge(flatten([
+  net_rgs = merge(flatten([
     for netKey, netConfig in try(local.config_data.cloud.networks, {}) : [
       try(netConfig.resource_group, null) != null ? {
         (format("%s:%s", try(netConfig.location, local.g_location), netConfig.resource_group)) = {
@@ -150,7 +149,7 @@ locals {
       } : null
     ] if try(netConfig.location, local.g_location) != null
   ])...)
-  vnetRGs = merge(flatten([
+  vnet_rgs = merge(flatten([
     for key, config in local.vnets : {
       (format("%s:%s", config.location, config.resource_group_name)) = {
         name     = config.resource_group_name
@@ -159,7 +158,7 @@ locals {
       }
     } if config.location != null
   ])...)
-  nsgRGs = merge(flatten([
+  nsg_rgs = merge(flatten([
     for key, config in local.nsgs : {
       (format("%s:%s", config.location, config.resource_group_name)) = {
         name     = config.resource_group_name
@@ -168,7 +167,7 @@ locals {
       }
     } if config.location != null
   ])...)
-  rtRGs = merge(flatten([
+  rt_rgs = merge(flatten([
     for key, config in local.rts : {
       (format("%s:%s", config.location, config.resource_group_name)) = {
         name     = config.resource_group_name
@@ -177,19 +176,19 @@ locals {
       }
     } if config.location != null
   ])...)
-  gRG = local.g_location != "" && local.g_resource_group == null ? null : {
+  g_rg = local.g_location != "" && local.g_resource_group == null ? null : {
     (format("%s:%s", local.g_location, local.g_resource_group)) = {
       name     = local.g_resource_group
       location = local.g_location
       tags     = local.g_tags
     }
   }
-  allRGs = merge(local.rgs, local.netRGs, local.vnetRGs, local.nsgRGs, local.rtRGs, local.gRG)
+  all_rgs = merge(local.rgs, local.net_rgs, local.vnet_rgs, local.nsg_rgs, local.rt_rgs, local.g_rg)
 }
 
 module "rg" {
   source     = "../modules/resource_group"
-  parameters = local.allRGs
+  parameters = local.all_rgs
 }
 
 module "vnet" {
@@ -207,13 +206,13 @@ module "peering" {
 module "rt" {
   source                 = "../modules/route_table"
   parameters             = local.rts
-  association_parameters = local.rtAssoc
+  association_parameters = local.rt_assoc
   depends_on             = [module.vnet]
 }
 
 module "nsg" {
   source                 = "../modules/network_security_group"
   parameters             = local.nsgs
-  association_parameters = local.nsgAssoc
+  association_parameters = local.nsg_assoc
   depends_on             = [module.vnet]
 }

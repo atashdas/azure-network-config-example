@@ -23,7 +23,6 @@ resource "azurerm_virtual_network" "this" {
   location            = each.value.location
   resource_group_name = each.value.resource_group_name
   address_space       = each.value.address_space
-  dns_servers         = each.value.dns_servers
   tags                = each.value.tags
 }
 
@@ -38,8 +37,5 @@ resource "azurerm_subnet" "this" {
   private_endpoint_network_policies = each.value.private_endpoint_network_policies
   service_endpoints                 = each.value.service_endpoints
 
-  depends_on = [ azurerm_virtual_network.this ]
+  depends_on = [azurerm_virtual_network.this]
 }
-
-
-

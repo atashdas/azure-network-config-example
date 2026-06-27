@@ -14,17 +14,17 @@ locals {
     ]
   ])...)
 
-  nextHopIp_nonVirtualAppliance = merge(flatten([
+  next_hop_ip_non_virtual_appliance = merge(flatten([
     for key, rule in local.routes : {
       (key) = {}
     } if rule.next_hop_type != "VirtualAppliance" && try(rule.next_hop_in_ip_address, null) != null
   ])...)
 }
 
-check "nextHopIp_nonVirtualAppliance" {
+check "next_hop_ip_non_virtual_appliance" {
   assert {
-    condition     = length(keys(local.nextHopIp_nonVirtualAppliance)) == 0
-    error_message = "nextHopIp_nonVirtualAppliance in: ${join(",", keys(local.nextHopIp_nonVirtualAppliance))}!"
+    condition     = length(keys(local.next_hop_ip_non_virtual_appliance)) == 0
+    error_message = "next_hop_ip_non_virtual_appliance in: ${join(",", keys(local.next_hop_ip_non_virtual_appliance))}!"
   }
 }
 
@@ -49,7 +49,7 @@ resource "azurerm_route" "this" {
   next_hop_in_ip_address = each.value.next_hop_in_ip_address
   resource_group_name    = each.value.resource_group_name
 
-  depends_on = [ azurerm_route_table.this ]
+  depends_on = [azurerm_route_table.this]
 }
 
 resource "azurerm_subnet_route_table_association" "this" {
@@ -58,5 +58,5 @@ resource "azurerm_subnet_route_table_association" "this" {
   subnet_id      = each.value.subnet_id
   route_table_id = azurerm_route_table.this[each.value.route_table_key].id
 
-  depends_on = [ azurerm_route_table.this, azurerm_route.this ]
+  depends_on = [azurerm_route_table.this, azurerm_route.this]
 }

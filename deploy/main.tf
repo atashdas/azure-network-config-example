@@ -12,7 +12,6 @@ locals {
   g_subscription_id = try(local.config_data.cloud.global.azure.subscription_id, "")
 
   g_resource_group   = try(local.config_data.cloud.global.defaults.resource_group, null)
-  g_dns_servers      = try(local.config_data.cloud.global.defaults.dns_servers, null)
   g_peering_settings = try(local.config_data.cloud.global.defaults.peering, {})
 
   g_tags = { for k, v in try(local.config_data.cloud.global.tags, {}) : k => v }
@@ -45,4 +44,3 @@ check "no_tenant_id" {
     error_message = "Azure tenant_id is missing in configuration."
   }
 }
-

@@ -27,7 +27,7 @@ variable "parameters" {
 variable "association_parameters" {
   description = "Parameters for network security group to subnet associations to be created."
   type = map(object({
-    subnet_id = string
+    subnet_id                  = string
     network_security_group_key = string
   }))
 }
