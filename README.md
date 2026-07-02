@@ -1,3 +1,5 @@
+# azure-network-config-example
+
 Creates an azure hub-spoke network with resource groups, vnets, subnets, route tables and network security groups per configuration in a YAML or JSON configuration file. This implementation demonstrates a **configuration-first** approach to Azure network provisioning where a YAML or JSON configuration defines **what** needs to be deployed, and a generic Terraform module describes **how** this is deployed.
 
 This approach makes Azure network provisioning accessible to network engineers who understand topology but not Terraform syntax, integrates naturally with change management and GitOps practices, and scales from a simple hub-with-one-spoke to a complex multi-region, multi-hub enterprise network. The configuration file becomes a machine-readable network architecture document.
