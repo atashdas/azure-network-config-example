@@ -2,8 +2,8 @@
 cloud:
   global:
     azure:
-      subscription_id: 19c7a02a-910d-4397-898a-525dc623406c
-      tenant_id: 21c73cd9-cf70-4598-8f36-c347b3896cb4
+      subscription_id: "<subscription id>"
+      tenant_id: "<tenant id>"
       location: australiaeast
     defaults:
       resource_group: rg-network-all
@@ -36,6 +36,8 @@ cloud:
       route_tables:
         rt-hub-gateway:
           bgp_route_propagation_enabled: true
+          subnet_keys:
+            - vnet-acme-es-hub-australiaeast:GatewaySubnet
           routes:
             rt-hub-gateway-01:
               address_prefix: 10.198.0.128/25
@@ -53,8 +55,6 @@ cloud:
               address_prefix: 0.0.0.0/0
               next_hop_type: VirtualAppliance
               next_hop_in_ip_address: 10.198.1.100
-          subnet_keys:
-            - vnet-acme-es-hub-australiaeast:GatewaySubnet
       network_security_groups:
         nsg-hub-gateway:
           subnet_keys:
@@ -101,18 +101,32 @@ cloud:
           peerings:
             hub-identity:
               remote_virtual_network_name: vnet-acme-es-identity-australiaeast
+              allow_gateway_transit: true
             hub-sandbox:
               remote_virtual_network_name: vnet-acme-es-sbx-australiaeast
+              allow_gateway_transit: true
             hub-nonprod-dev:
               remote_virtual_network_name: vnet-acme-es-dev-australiaeast
+              allow_gateway_transit: true
             hub-nonprod-test:
               remote_virtual_network_name: vnet-acme-es-test-australiaeast
+              allow_gateway_transit: true
             hub-prod:
               remote_virtual_network_name: vnet-acme-es-prod-australiaeast
+              allow_gateway_transit: true
     identity:
+      resource_group: rg-network-identity
+      route_tables:
+        rt-identity-all:
+          subnet_keys:
+            - vnet-acme-es-identity-australiaeast:snet-identity-app
+          routes:
+            rt-identity-all-01:
+              address_prefix: 0.0.0.0/0
+              next_hop_type: VirtualAppliance
+              next_hop_in_ip_address: 10.198.1.100
       vnets:
         vnet-acme-es-identity-australiaeast:
-          resource_group: rg-network-identity
           address_space:
             - 10.198.2.0/23
           subnets:
@@ -126,12 +140,21 @@ cloud:
           peerings:
             identity-hub:
               remote_virtual_network_name: vnet-acme-es-hub-australiaeast
-              allow_gateway_transit: true
               use_remote_gateways: true
     sandbox:
+      resource_group: rg-network-sbx
+      route_tables:
+        rt-sbx-all:
+          subnet_keys:
+            - vnet-acme-es-sbx-australiaeast:snet-sbx-app
+            - vnet-acme-es-sbx-australiaeast:snet-sbx-db
+          routes:
+            rt-sbx-all-01:
+              address_prefix: 0.0.0.0/0
+              next_hop_type: VirtualAppliance
+              next_hop_in_ip_address: 10.198.1.100
       vnets:
         vnet-acme-es-sbx-australiaeast:
-          resource_group: rg-network-sbx
           address_space:
             - 10.198.4.0/23
           subnets:
@@ -152,9 +175,29 @@ cloud:
           peerings:
             sandbox-hub:
               remote_virtual_network_name: vnet-acme-es-hub-australiaeast
-              allow_gateway_transit: true
               use_remote_gateways: true
     non_production:
+      route_tables:
+        rt-dev-all:
+          resource_group: rg-network-dev
+          subnet_keys:
+            - vnet-acme-es-dev-australiaeast:snet-dev-app
+            - vnet-acme-es-dev-australiaeast:snet-dev-db
+          routes:
+            rt-dev-all-01:
+              address_prefix: 0.0.0.0/0
+              next_hop_type: VirtualAppliance
+              next_hop_in_ip_address: 10.198.1.100
+        rt-test-all:
+          resource_group: rg-network-test
+          subnet_keys:
+            - vnet-acme-es-test-australiaeast:snet-test-app
+            - vnet-acme-es-test-australiaeast:snet-test-db
+          routes:
+            rt-test-all-01:
+              address_prefix: 0.0.0.0/0
+              next_hop_type: VirtualAppliance
+              next_hop_in_ip_address: 10.198.1.100
       vnets:
         vnet-acme-es-dev-australiaeast:
           resource_group: rg-network-dev
@@ -178,7 +221,6 @@ cloud:
           peerings:
             dev-hub:
               remote_virtual_network_name: vnet-acme-es-hub-australiaeast
-              allow_gateway_transit: true
               use_remote_gateways: true
         vnet-acme-es-test-australiaeast:
           resource_group: rg-network-test
@@ -202,12 +244,21 @@ cloud:
           peerings:
             test-hub:
               remote_virtual_network_name: vnet-acme-es-hub-australiaeast
-              allow_gateway_transit: true
               use_remote_gateways: true
     production:
+      resource_group: rg-network-prod
+      route_tables:
+        rt-prod-all:
+          subnet_keys:
+            - vnet-acme-es-prod-australiaeast:snet-prod-app
+            - vnet-acme-es-prod-australiaeast:snet-prod-db
+          routes:
+            rt-prod-all-01:
+              address_prefix: 0.0.0.0/0
+              next_hop_type: VirtualAppliance
+              next_hop_in_ip_address: 10.198.1.100
       vnets:
         vnet-acme-es-prod-australiaeast:
-          resource_group: rg-network-prod
           address_space:
             - 10.198.10.0/23
           subnets:
@@ -228,5 +279,4 @@ cloud:
           peerings:
             prod-hub:
               remote_virtual_network_name: vnet-acme-es-hub-australiaeast
-              allow_gateway_transit: true
               use_remote_gateways: true

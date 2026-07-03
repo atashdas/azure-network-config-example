@@ -1,0 +1,973 @@
+<pre>
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.nsg.azurerm_network_security_group.this["hub:nsg-hub-gateway"] will be created
+  + resource "azurerm_network_security_group" "this" {
+      + id                  = (known after apply)
+      + location            = "australiaeast"
+      + name                = "nsg-hub-gateway"
+      + resource_group_name = "rg-network-hub"
+      + security_rule       = (known after apply)
+      + tags                = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.nsg.azurerm_network_security_rule.this["hub:nsg-hub-gateway:onpremises-web-access"] will be created
+  + resource "azurerm_network_security_rule" "this" {
+      + access                       = "Allow"
+      + destination_address_prefixes = [
+          + "10.198.10.0/24",
+          + "10.198.2.0/24",
+          + "10.198.4.0/24",
+          + "10.198.6.0/24",
+          + "10.198.8.0/24",
+        ]
+      + destination_port_ranges      = [
+          + "443",
+          + "80",
+        ]
+      + direction                    = "Inbound"
+      + id                           = (known after apply)
+      + name                         = "onpremises-web-access"
+      + network_security_group_name  = "nsg-hub-gateway"
+      + priority                     = 100
+      + protocol                     = "Tcp"
+      + resource_group_name          = "rg-network-hub"
+      + source_address_prefixes      = [
+          + "10.0.0.0/10",
+          + "172.68.0.0/16",
+          + "192.76.0.0/16",
+        ]
+      + source_port_ranges           = [
+          + "*",
+        ]
+    }
+
+  # module.nsg.azurerm_subnet_network_security_group_association.this["hub:nsg-hub-gateway:vnet-acme-es-hub-australiaeast:GatewaySubnet"] will be created
+  + resource "azurerm_subnet_network_security_group_association" "this" {
+      + id                        = (known after apply)
+      + network_security_group_id = (known after apply)
+      + subnet_id                 = (known after apply)
+    }
+
+  # module.peering.azurerm_virtual_network_peering.this["vnet-acme-es-dev-australiaeast:dev-hub"] will be created
+  + resource "azurerm_virtual_network_peering" "this" {
+      + allow_forwarded_traffic                = true
+      + allow_gateway_transit                  = false
+      + allow_virtual_network_access           = true
+      + id                                     = (known after apply)
+      + name                                   = "dev-hub"
+      + peer_complete_virtual_networks_enabled = true
+      + remote_virtual_network_id              = (known after apply)
+      + resource_group_name                    = "rg-network-dev"
+      + use_remote_gateways                    = true
+      + virtual_network_name                   = "vnet-acme-es-dev-australiaeast"
+    }
+
+  # module.peering.azurerm_virtual_network_peering.this["vnet-acme-es-hub-australiaeast:hub-identity"] will be created
+  + resource "azurerm_virtual_network_peering" "this" {
+      + allow_forwarded_traffic                = true
+      + allow_gateway_transit                  = true
+      + allow_virtual_network_access           = true
+      + id                                     = (known after apply)
+      + name                                   = "hub-identity"
+      + peer_complete_virtual_networks_enabled = true
+      + remote_virtual_network_id              = (known after apply)
+      + resource_group_name                    = "rg-network-hub"
+      + use_remote_gateways                    = false
+      + virtual_network_name                   = "vnet-acme-es-hub-australiaeast"
+    }
+
+  # module.peering.azurerm_virtual_network_peering.this["vnet-acme-es-hub-australiaeast:hub-nonprod-dev"] will be created
+  + resource "azurerm_virtual_network_peering" "this" {
+      + allow_forwarded_traffic                = true
+      + allow_gateway_transit                  = true
+      + allow_virtual_network_access           = true
+      + id                                     = (known after apply)
+      + name                                   = "hub-nonprod-dev"
+      + peer_complete_virtual_networks_enabled = true
+      + remote_virtual_network_id              = (known after apply)
+      + resource_group_name                    = "rg-network-hub"
+      + use_remote_gateways                    = false
+      + virtual_network_name                   = "vnet-acme-es-hub-australiaeast"
+    }
+
+  # module.peering.azurerm_virtual_network_peering.this["vnet-acme-es-hub-australiaeast:hub-nonprod-test"] will be created
+  + resource "azurerm_virtual_network_peering" "this" {
+      + allow_forwarded_traffic                = true
+      + allow_gateway_transit                  = true
+      + allow_virtual_network_access           = true
+      + id                                     = (known after apply)
+      + name                                   = "hub-nonprod-test"
+      + peer_complete_virtual_networks_enabled = true
+      + remote_virtual_network_id              = (known after apply)
+      + resource_group_name                    = "rg-network-hub"
+      + use_remote_gateways                    = false
+      + virtual_network_name                   = "vnet-acme-es-hub-australiaeast"
+    }
+
+  # module.peering.azurerm_virtual_network_peering.this["vnet-acme-es-hub-australiaeast:hub-prod"] will be created
+  + resource "azurerm_virtual_network_peering" "this" {
+      + allow_forwarded_traffic                = true
+      + allow_gateway_transit                  = true
+      + allow_virtual_network_access           = true
+      + id                                     = (known after apply)
+      + name                                   = "hub-prod"
+      + peer_complete_virtual_networks_enabled = true
+      + remote_virtual_network_id              = (known after apply)
+      + resource_group_name                    = "rg-network-hub"
+      + use_remote_gateways                    = false
+      + virtual_network_name                   = "vnet-acme-es-hub-australiaeast"
+    }
+
+  # module.peering.azurerm_virtual_network_peering.this["vnet-acme-es-hub-australiaeast:hub-sandbox"] will be created
+  + resource "azurerm_virtual_network_peering" "this" {
+      + allow_forwarded_traffic                = true
+      + allow_gateway_transit                  = true
+      + allow_virtual_network_access           = true
+      + id                                     = (known after apply)
+      + name                                   = "hub-sandbox"
+      + peer_complete_virtual_networks_enabled = true
+      + remote_virtual_network_id              = (known after apply)
+      + resource_group_name                    = "rg-network-hub"
+      + use_remote_gateways                    = false
+      + virtual_network_name                   = "vnet-acme-es-hub-australiaeast"
+    }
+
+  # module.peering.azurerm_virtual_network_peering.this["vnet-acme-es-identity-australiaeast:identity-hub"] will be created
+  + resource "azurerm_virtual_network_peering" "this" {
+      + allow_forwarded_traffic                = true
+      + allow_gateway_transit                  = false
+      + allow_virtual_network_access           = true
+      + id                                     = (known after apply)
+      + name                                   = "identity-hub"
+      + peer_complete_virtual_networks_enabled = true
+      + remote_virtual_network_id              = (known after apply)
+      + resource_group_name                    = "rg-network-identity"
+      + use_remote_gateways                    = true
+      + virtual_network_name                   = "vnet-acme-es-identity-australiaeast"
+    }
+
+  # module.peering.azurerm_virtual_network_peering.this["vnet-acme-es-prod-australiaeast:prod-hub"] will be created
+  + resource "azurerm_virtual_network_peering" "this" {
+      + allow_forwarded_traffic                = true
+      + allow_gateway_transit                  = false
+      + allow_virtual_network_access           = true
+      + id                                     = (known after apply)
+      + name                                   = "prod-hub"
+      + peer_complete_virtual_networks_enabled = true
+      + remote_virtual_network_id              = (known after apply)
+      + resource_group_name                    = "rg-network-prod"
+      + use_remote_gateways                    = true
+      + virtual_network_name                   = "vnet-acme-es-prod-australiaeast"
+    }
+
+  # module.peering.azurerm_virtual_network_peering.this["vnet-acme-es-sbx-australiaeast:sandbox-hub"] will be created
+  + resource "azurerm_virtual_network_peering" "this" {
+      + allow_forwarded_traffic                = true
+      + allow_gateway_transit                  = false
+      + allow_virtual_network_access           = true
+      + id                                     = (known after apply)
+      + name                                   = "sandbox-hub"
+      + peer_complete_virtual_networks_enabled = true
+      + remote_virtual_network_id              = (known after apply)
+      + resource_group_name                    = "rg-network-sbx"
+      + use_remote_gateways                    = true
+      + virtual_network_name                   = "vnet-acme-es-sbx-australiaeast"
+    }
+
+  # module.peering.azurerm_virtual_network_peering.this["vnet-acme-es-test-australiaeast:test-hub"] will be created
+  + resource "azurerm_virtual_network_peering" "this" {
+      + allow_forwarded_traffic                = true
+      + allow_gateway_transit                  = false
+      + allow_virtual_network_access           = true
+      + id                                     = (known after apply)
+      + name                                   = "test-hub"
+      + peer_complete_virtual_networks_enabled = true
+      + remote_virtual_network_id              = (known after apply)
+      + resource_group_name                    = "rg-network-test"
+      + use_remote_gateways                    = true
+      + virtual_network_name                   = "vnet-acme-es-test-australiaeast"
+    }
+
+  # module.rg.azurerm_management_lock.this["australiacentral2:rg-network-dr2"] will be created
+  + resource "azurerm_management_lock" "this" {
+      + id         = (known after apply)
+      + lock_level = "ReadOnly"
+      + name       = "rg-network-dr2-lock"
+      + notes      = "Resource Group rg-network-dr2 is locked at ReadOnly level."
+      + scope      = (known after apply)
+    }
+
+  # module.rg.azurerm_management_lock.this["australiacentral:rg-network-dr"] will be created
+  + resource "azurerm_management_lock" "this" {
+      + id         = (known after apply)
+      + lock_level = "CanNotDelete"
+      + name       = "rg-network-dr-lock"
+      + notes      = "Resource Group rg-network-dr is locked at CanNotDelete level."
+      + scope      = (known after apply)
+    }
+
+  # module.rg.azurerm_resource_group.this["australiacentral2:rg-network-dr2"] will be created
+  + resource "azurerm_resource_group" "this" {
+      + id       = (known after apply)
+      + location = "australiacentral2"
+      + name     = "rg-network-dr2"
+      + tags     = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+          + "scope"          = "dr2"
+        }
+    }
+
+  # module.rg.azurerm_resource_group.this["australiacentral:rg-network-dr"] will be created
+  + resource "azurerm_resource_group" "this" {
+      + id       = (known after apply)
+      + location = "australiacentral"
+      + name     = "rg-network-dr"
+      + tags     = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+          + "scope"          = "dr"
+        }
+    }
+
+  # module.rg.azurerm_resource_group.this["australiaeast:rg-network-all"] will be created
+  + resource "azurerm_resource_group" "this" {
+      + id       = (known after apply)
+      + location = "australiaeast"
+      + name     = "rg-network-all"
+      + tags     = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.rg.azurerm_resource_group.this["australiaeast:rg-network-dev"] will be created
+  + resource "azurerm_resource_group" "this" {
+      + id       = (known after apply)
+      + location = "australiaeast"
+      + name     = "rg-network-dev"
+      + tags     = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.rg.azurerm_resource_group.this["australiaeast:rg-network-hub"] will be created
+  + resource "azurerm_resource_group" "this" {
+      + id       = (known after apply)
+      + location = "australiaeast"
+      + name     = "rg-network-hub"
+      + tags     = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.rg.azurerm_resource_group.this["australiaeast:rg-network-identity"] will be created
+  + resource "azurerm_resource_group" "this" {
+      + id       = (known after apply)
+      + location = "australiaeast"
+      + name     = "rg-network-identity"
+      + tags     = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.rg.azurerm_resource_group.this["australiaeast:rg-network-prod"] will be created
+  + resource "azurerm_resource_group" "this" {
+      + id       = (known after apply)
+      + location = "australiaeast"
+      + name     = "rg-network-prod"
+      + tags     = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.rg.azurerm_resource_group.this["australiaeast:rg-network-sbx"] will be created
+  + resource "azurerm_resource_group" "this" {
+      + id       = (known after apply)
+      + location = "australiaeast"
+      + name     = "rg-network-sbx"
+      + tags     = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.rg.azurerm_resource_group.this["australiaeast:rg-network-test"] will be created
+  + resource "azurerm_resource_group" "this" {
+      + id       = (known after apply)
+      + location = "australiaeast"
+      + name     = "rg-network-test"
+      + tags     = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.rt.azurerm_route.this["hub:rt-hub-gateway:rt-hub-gateway-01"] will be created
+  + resource "azurerm_route" "this" {
+      + address_prefix      = "10.198.0.128/25"
+      + id                  = (known after apply)
+      + name                = "rt-hub-gateway-01"
+      + next_hop_type       = "VnetLocal"
+      + resource_group_name = "rg-network-hub"
+      + route_table_name    = "rt-hub-gateway"
+    }
+
+  # module.rt.azurerm_route.this["hub:rt-hub-gateway:rt-hub-gateway-02"] will be created
+  + resource "azurerm_route" "this" {
+      + address_prefix      = "10.0.0.0/10"
+      + id                  = (known after apply)
+      + name                = "rt-hub-gateway-02"
+      + next_hop_type       = "VirtualNetworkGateway"
+      + resource_group_name = "rg-network-hub"
+      + route_table_name    = "rt-hub-gateway"
+    }
+
+  # module.rt.azurerm_route.this["hub:rt-hub-gateway:rt-hub-gateway-03"] will be created
+  + resource "azurerm_route" "this" {
+      + address_prefix      = "172.68.0.0/16"
+      + id                  = (known after apply)
+      + name                = "rt-hub-gateway-03"
+      + next_hop_type       = "VirtualNetworkGateway"
+      + resource_group_name = "rg-network-hub"
+      + route_table_name    = "rt-hub-gateway"
+    }
+
+  # module.rt.azurerm_route.this["hub:rt-hub-gateway:rt-hub-gateway-04"] will be created
+  + resource "azurerm_route" "this" {
+      + address_prefix      = "192.76.0.0/16"
+      + id                  = (known after apply)
+      + name                = "rt-hub-gateway-04"
+      + next_hop_type       = "VirtualNetworkGateway"
+      + resource_group_name = "rg-network-hub"
+      + route_table_name    = "rt-hub-gateway"
+    }
+
+  # module.rt.azurerm_route.this["hub:rt-hub-gateway:rt-hub-gateway-05"] will be created
+  + resource "azurerm_route" "this" {
+      + address_prefix         = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + name                   = "rt-hub-gateway-05"
+      + next_hop_in_ip_address = "10.198.1.100"
+      + next_hop_type          = "VirtualAppliance"
+      + resource_group_name    = "rg-network-hub"
+      + route_table_name       = "rt-hub-gateway"
+    }
+
+  # module.rt.azurerm_route.this["identity:rt-identity-all:rt-identity-all-01"] will be created
+  + resource "azurerm_route" "this" {
+      + address_prefix         = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + name                   = "rt-identity-all-01"
+      + next_hop_in_ip_address = "10.198.1.100"
+      + next_hop_type          = "VirtualAppliance"
+      + resource_group_name    = "rg-network-identity"
+      + route_table_name       = "rt-identity-all"
+    }
+
+  # module.rt.azurerm_route.this["non_production:rt-dev-all:rt-dev-all-01"] will be created
+  + resource "azurerm_route" "this" {
+      + address_prefix         = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + name                   = "rt-dev-all-01"
+      + next_hop_in_ip_address = "10.198.1.100"
+      + next_hop_type          = "VirtualAppliance"
+      + resource_group_name    = "rg-network-dev"
+      + route_table_name       = "rt-dev-all"
+    }
+
+  # module.rt.azurerm_route.this["non_production:rt-test-all:rt-test-all-01"] will be created
+  + resource "azurerm_route" "this" {
+      + address_prefix         = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + name                   = "rt-test-all-01"
+      + next_hop_in_ip_address = "10.198.1.100"
+      + next_hop_type          = "VirtualAppliance"
+      + resource_group_name    = "rg-network-test"
+      + route_table_name       = "rt-test-all"
+    }
+
+  # module.rt.azurerm_route.this["production:rt-prod-all:rt-prod-all-01"] will be created
+  + resource "azurerm_route" "this" {
+      + address_prefix         = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + name                   = "rt-prod-all-01"
+      + next_hop_in_ip_address = "10.198.1.100"
+      + next_hop_type          = "VirtualAppliance"
+      + resource_group_name    = "rg-network-prod"
+      + route_table_name       = "rt-prod-all"
+    }
+
+  # module.rt.azurerm_route.this["sandbox:rt-sbx-all:rt-sbx-all-01"] will be created
+  + resource "azurerm_route" "this" {
+      + address_prefix         = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + name                   = "rt-sbx-all-01"
+      + next_hop_in_ip_address = "10.198.1.100"
+      + next_hop_type          = "VirtualAppliance"
+      + resource_group_name    = "rg-network-sbx"
+      + route_table_name       = "rt-sbx-all"
+    }
+
+  # module.rt.azurerm_route_table.this["hub:rt-hub-gateway"] will be created
+  + resource "azurerm_route_table" "this" {
+      + bgp_route_propagation_enabled = true
+      + id                            = (known after apply)
+      + location                      = "australiaeast"
+      + name                          = "rt-hub-gateway"
+      + resource_group_name           = "rg-network-hub"
+      + route                         = (known after apply)
+      + subnets                       = (known after apply)
+      + tags                          = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.rt.azurerm_route_table.this["identity:rt-identity-all"] will be created
+  + resource "azurerm_route_table" "this" {
+      + bgp_route_propagation_enabled = true
+      + id                            = (known after apply)
+      + location                      = "australiaeast"
+      + name                          = "rt-identity-all"
+      + resource_group_name           = "rg-network-identity"
+      + route                         = (known after apply)
+      + subnets                       = (known after apply)
+      + tags                          = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.rt.azurerm_route_table.this["non_production:rt-dev-all"] will be created
+  + resource "azurerm_route_table" "this" {
+      + bgp_route_propagation_enabled = true
+      + id                            = (known after apply)
+      + location                      = "australiaeast"
+      + name                          = "rt-dev-all"
+      + resource_group_name           = "rg-network-dev"
+      + route                         = (known after apply)
+      + subnets                       = (known after apply)
+      + tags                          = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.rt.azurerm_route_table.this["non_production:rt-test-all"] will be created
+  + resource "azurerm_route_table" "this" {
+      + bgp_route_propagation_enabled = true
+      + id                            = (known after apply)
+      + location                      = "australiaeast"
+      + name                          = "rt-test-all"
+      + resource_group_name           = "rg-network-test"
+      + route                         = (known after apply)
+      + subnets                       = (known after apply)
+      + tags                          = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.rt.azurerm_route_table.this["production:rt-prod-all"] will be created
+  + resource "azurerm_route_table" "this" {
+      + bgp_route_propagation_enabled = true
+      + id                            = (known after apply)
+      + location                      = "australiaeast"
+      + name                          = "rt-prod-all"
+      + resource_group_name           = "rg-network-prod"
+      + route                         = (known after apply)
+      + subnets                       = (known after apply)
+      + tags                          = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.rt.azurerm_route_table.this["sandbox:rt-sbx-all"] will be created
+  + resource "azurerm_route_table" "this" {
+      + bgp_route_propagation_enabled = true
+      + id                            = (known after apply)
+      + location                      = "australiaeast"
+      + name                          = "rt-sbx-all"
+      + resource_group_name           = "rg-network-sbx"
+      + route                         = (known after apply)
+      + subnets                       = (known after apply)
+      + tags                          = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.rt.azurerm_subnet_route_table_association.this["hub:rt-hub-gateway:vnet-acme-es-hub-australiaeast:GatewaySubnet"] will be created
+  + resource "azurerm_subnet_route_table_association" "this" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.rt.azurerm_subnet_route_table_association.this["identity:rt-identity-all:vnet-acme-es-identity-australiaeast:snet-identity-app"] will be created
+  + resource "azurerm_subnet_route_table_association" "this" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.rt.azurerm_subnet_route_table_association.this["non_production:rt-dev-all:vnet-acme-es-dev-australiaeast:snet-dev-app"] will be created
+  + resource "azurerm_subnet_route_table_association" "this" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.rt.azurerm_subnet_route_table_association.this["non_production:rt-dev-all:vnet-acme-es-dev-australiaeast:snet-dev-db"] will be created
+  + resource "azurerm_subnet_route_table_association" "this" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.rt.azurerm_subnet_route_table_association.this["non_production:rt-test-all:vnet-acme-es-test-australiaeast:snet-test-app"] will be created
+  + resource "azurerm_subnet_route_table_association" "this" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.rt.azurerm_subnet_route_table_association.this["non_production:rt-test-all:vnet-acme-es-test-australiaeast:snet-test-db"] will be created
+  + resource "azurerm_subnet_route_table_association" "this" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.rt.azurerm_subnet_route_table_association.this["production:rt-prod-all:vnet-acme-es-prod-australiaeast:snet-prod-app"] will be created
+  + resource "azurerm_subnet_route_table_association" "this" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.rt.azurerm_subnet_route_table_association.this["production:rt-prod-all:vnet-acme-es-prod-australiaeast:snet-prod-db"] will be created
+  + resource "azurerm_subnet_route_table_association" "this" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.rt.azurerm_subnet_route_table_association.this["sandbox:rt-sbx-all:vnet-acme-es-sbx-australiaeast:snet-sbx-app"] will be created
+  + resource "azurerm_subnet_route_table_association" "this" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.rt.azurerm_subnet_route_table_association.this["sandbox:rt-sbx-all:vnet-acme-es-sbx-australiaeast:snet-sbx-db"] will be created
+  + resource "azurerm_subnet_route_table_association" "this" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.vnet.azurerm_subnet.this["vnet-acme-es-dev-australiaeast:snet-dev-app"] will be created
+  + resource "azurerm_subnet" "this" {
+      + address_prefixes                              = [
+          + "10.198.6.0/24",
+        ]
+      + default_outbound_access_enabled               = false
+      + id                                            = (known after apply)
+      + name                                          = "snet-dev-app"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-network-dev"
+      + service_endpoints                             = [
+          + "Microsoft.KeyVault",
+          + "Microsoft.Storage",
+        ]
+      + virtual_network_name                          = "vnet-acme-es-dev-australiaeast"
+    }
+
+  # module.vnet.azurerm_subnet.this["vnet-acme-es-dev-australiaeast:snet-dev-db"] will be created
+  + resource "azurerm_subnet" "this" {
+      + address_prefixes                              = [
+          + "10.198.7.0/24",
+        ]
+      + default_outbound_access_enabled               = false
+      + id                                            = (known after apply)
+      + name                                          = "snet-dev-db"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-network-dev"
+      + service_endpoints                             = [
+          + "Microsoft.KeyVault",
+          + "Microsoft.Storage",
+        ]
+      + virtual_network_name                          = "vnet-acme-es-dev-australiaeast"
+    }
+
+  # module.vnet.azurerm_subnet.this["vnet-acme-es-hub-australiaeast:AzureBastionSubnet"] will be created
+  + resource "azurerm_subnet" "this" {
+      + address_prefixes                              = [
+          + "10.198.0.0/25",
+        ]
+      + default_outbound_access_enabled               = true
+      + id                                            = (known after apply)
+      + name                                          = "AzureBastionSubnet"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-network-hub"
+      + virtual_network_name                          = "vnet-acme-es-hub-australiaeast"
+    }
+
+  # module.vnet.azurerm_subnet.this["vnet-acme-es-hub-australiaeast:AzureFirewallSubnet"] will be created
+  + resource "azurerm_subnet" "this" {
+      + address_prefixes                              = [
+          + "10.198.1.0/25",
+        ]
+      + default_outbound_access_enabled               = true
+      + id                                            = (known after apply)
+      + name                                          = "AzureFirewallSubnet"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-network-hub"
+      + virtual_network_name                          = "vnet-acme-es-hub-australiaeast"
+    }
+
+  # module.vnet.azurerm_subnet.this["vnet-acme-es-hub-australiaeast:GatewaySubnet"] will be created
+  + resource "azurerm_subnet" "this" {
+      + address_prefixes                              = [
+          + "10.198.0.128/25",
+        ]
+      + default_outbound_access_enabled               = true
+      + id                                            = (known after apply)
+      + name                                          = "GatewaySubnet"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-network-hub"
+      + virtual_network_name                          = "vnet-acme-es-hub-australiaeast"
+    }
+
+  # module.vnet.azurerm_subnet.this["vnet-acme-es-identity-australiaeast:snet-identity-app"] will be created
+  + resource "azurerm_subnet" "this" {
+      + address_prefixes                              = [
+          + "10.198.2.0/24",
+        ]
+      + default_outbound_access_enabled               = false
+      + id                                            = (known after apply)
+      + name                                          = "snet-identity-app"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-network-identity"
+      + service_endpoints                             = [
+          + "Microsoft.KeyVault",
+          + "Microsoft.Storage",
+        ]
+      + virtual_network_name                          = "vnet-acme-es-identity-australiaeast"
+    }
+
+  # module.vnet.azurerm_subnet.this["vnet-acme-es-prod-australiaeast:snet-prod-app"] will be created
+  + resource "azurerm_subnet" "this" {
+      + address_prefixes                              = [
+          + "10.198.10.0/24",
+        ]
+      + default_outbound_access_enabled               = false
+      + id                                            = (known after apply)
+      + name                                          = "snet-prod-app"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-network-prod"
+      + service_endpoints                             = [
+          + "Microsoft.KeyVault",
+          + "Microsoft.Storage",
+        ]
+      + virtual_network_name                          = "vnet-acme-es-prod-australiaeast"
+    }
+
+  # module.vnet.azurerm_subnet.this["vnet-acme-es-prod-australiaeast:snet-prod-db"] will be created
+  + resource "azurerm_subnet" "this" {
+      + address_prefixes                              = [
+          + "10.198.11.0/24",
+        ]
+      + default_outbound_access_enabled               = false
+      + id                                            = (known after apply)
+      + name                                          = "snet-prod-db"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-network-prod"
+      + service_endpoints                             = [
+          + "Microsoft.KeyVault",
+          + "Microsoft.Storage",
+        ]
+      + virtual_network_name                          = "vnet-acme-es-prod-australiaeast"
+    }
+
+  # module.vnet.azurerm_subnet.this["vnet-acme-es-sbx-australiaeast:snet-sbx-app"] will be created
+  + resource "azurerm_subnet" "this" {
+      + address_prefixes                              = [
+          + "10.198.4.0/24",
+        ]
+      + default_outbound_access_enabled               = false
+      + id                                            = (known after apply)
+      + name                                          = "snet-sbx-app"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-network-sbx"
+      + service_endpoints                             = [
+          + "Microsoft.KeyVault",
+          + "Microsoft.Storage",
+        ]
+      + virtual_network_name                          = "vnet-acme-es-sbx-australiaeast"
+    }
+
+  # module.vnet.azurerm_subnet.this["vnet-acme-es-sbx-australiaeast:snet-sbx-db"] will be created
+  + resource "azurerm_subnet" "this" {
+      + address_prefixes                              = [
+          + "10.198.5.0/24",
+        ]
+      + default_outbound_access_enabled               = false
+      + id                                            = (known after apply)
+      + name                                          = "snet-sbx-db"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-network-sbx"
+      + service_endpoints                             = [
+          + "Microsoft.KeyVault",
+          + "Microsoft.Storage",
+        ]
+      + virtual_network_name                          = "vnet-acme-es-sbx-australiaeast"
+    }
+
+  # module.vnet.azurerm_subnet.this["vnet-acme-es-test-australiaeast:snet-test-app"] will be created
+  + resource "azurerm_subnet" "this" {
+      + address_prefixes                              = [
+          + "10.198.8.0/24",
+        ]
+      + default_outbound_access_enabled               = false
+      + id                                            = (known after apply)
+      + name                                          = "snet-test-app"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-network-test"
+      + service_endpoints                             = [
+          + "Microsoft.KeyVault",
+          + "Microsoft.Storage",
+        ]
+      + virtual_network_name                          = "vnet-acme-es-test-australiaeast"
+    }
+
+  # module.vnet.azurerm_subnet.this["vnet-acme-es-test-australiaeast:snet-test-db"] will be created
+  + resource "azurerm_subnet" "this" {
+      + address_prefixes                              = [
+          + "10.198.9.0/24",
+        ]
+      + default_outbound_access_enabled               = false
+      + id                                            = (known after apply)
+      + name                                          = "snet-test-db"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-network-test"
+      + service_endpoints                             = [
+          + "Microsoft.KeyVault",
+          + "Microsoft.Storage",
+        ]
+      + virtual_network_name                          = "vnet-acme-es-test-australiaeast"
+    }
+
+  # module.vnet.azurerm_virtual_network.this["vnet-acme-es-dev-australiaeast"] will be created
+  + resource "azurerm_virtual_network" "this" {
+      + address_space                  = [
+          + "10.198.6.0/23",
+        ]
+      + dns_servers                    = (known after apply)
+      + guid                           = (known after apply)
+      + id                             = (known after apply)
+      + location                       = "australiaeast"
+      + name                           = "vnet-acme-es-dev-australiaeast"
+      + private_endpoint_vnet_policies = "Disabled"
+      + resource_group_name            = "rg-network-dev"
+      + subnet                         = (known after apply)
+      + tags                           = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.vnet.azurerm_virtual_network.this["vnet-acme-es-hub-australiaeast"] will be created
+  + resource "azurerm_virtual_network" "this" {
+      + address_space                  = [
+          + "10.198.0.0/23",
+        ]
+      + dns_servers                    = (known after apply)
+      + guid                           = (known after apply)
+      + id                             = (known after apply)
+      + location                       = "australiaeast"
+      + name                           = "vnet-acme-es-hub-australiaeast"
+      + private_endpoint_vnet_policies = "Disabled"
+      + resource_group_name            = "rg-network-hub"
+      + subnet                         = (known after apply)
+      + tags                           = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.vnet.azurerm_virtual_network.this["vnet-acme-es-identity-australiaeast"] will be created
+  + resource "azurerm_virtual_network" "this" {
+      + address_space                  = [
+          + "10.198.2.0/23",
+        ]
+      + dns_servers                    = (known after apply)
+      + guid                           = (known after apply)
+      + id                             = (known after apply)
+      + location                       = "australiaeast"
+      + name                           = "vnet-acme-es-identity-australiaeast"
+      + private_endpoint_vnet_policies = "Disabled"
+      + resource_group_name            = "rg-network-identity"
+      + subnet                         = (known after apply)
+      + tags                           = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.vnet.azurerm_virtual_network.this["vnet-acme-es-prod-australiaeast"] will be created
+  + resource "azurerm_virtual_network" "this" {
+      + address_space                  = [
+          + "10.198.10.0/23",
+        ]
+      + dns_servers                    = (known after apply)
+      + guid                           = (known after apply)
+      + id                             = (known after apply)
+      + location                       = "australiaeast"
+      + name                           = "vnet-acme-es-prod-australiaeast"
+      + private_endpoint_vnet_policies = "Disabled"
+      + resource_group_name            = "rg-network-prod"
+      + subnet                         = (known after apply)
+      + tags                           = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.vnet.azurerm_virtual_network.this["vnet-acme-es-sbx-australiaeast"] will be created
+  + resource "azurerm_virtual_network" "this" {
+      + address_space                  = [
+          + "10.198.4.0/23",
+        ]
+      + dns_servers                    = (known after apply)
+      + guid                           = (known after apply)
+      + id                             = (known after apply)
+      + location                       = "australiaeast"
+      + name                           = "vnet-acme-es-sbx-australiaeast"
+      + private_endpoint_vnet_policies = "Disabled"
+      + resource_group_name            = "rg-network-sbx"
+      + subnet                         = (known after apply)
+      + tags                           = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+  # module.vnet.azurerm_virtual_network.this["vnet-acme-es-test-australiaeast"] will be created
+  + resource "azurerm_virtual_network" "this" {
+      + address_space                  = [
+          + "10.198.8.0/23",
+        ]
+      + dns_servers                    = (known after apply)
+      + guid                           = (known after apply)
+      + id                             = (known after apply)
+      + location                       = "australiaeast"
+      + name                           = "vnet-acme-es-test-australiaeast"
+      + private_endpoint_vnet_policies = "Disabled"
+      + resource_group_name            = "rg-network-test"
+      + subnet                         = (known after apply)
+      + tags                           = {
+          + "BusinessOwner"  = "Andrew Miller"
+          + "Department"     = "Enterprise Systems"
+          + "Division"       = "Digital"
+          + "Org"            = "ACME Corporation"
+          + "TechnicalOwner" = "adas@test.com"
+        }
+    }
+
+Plan: 68 to add, 0 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.</pre>
